@@ -10,7 +10,14 @@ class Ajuan_mhs extends MX_Controller{
     }
 
     public function index(){
-        $nim = nim($this->session->userdata('security')->id_cession);
+        $nim = NULL;
+        $lv= $this->session->userdata('security')->lv;
+        if($this->session->userdata('security')->lv == 8){
+            $nim= nim($this->session->userdata('security')->id_cession);
+        }
+        if($this->session->userdata('security')->lv >= 1 && $this->session->userdata('security')->lv <= 7 ){
+            $nim = $this->session->userdata('security')->id_cession;
+        }
       $a['kd_surat'] = $this->m_ajuan_mhs->getDataDariSurat($nim)->row()->kd_surat;
     //   print_r($a['kd_surat']);die;
         $a['data'] = $this->m_ajuan_mhs->getData($a['kd_surat']);

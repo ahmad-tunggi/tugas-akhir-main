@@ -229,7 +229,7 @@
                                             <td><?php echo $i->perihal; ?></td>
                                             <td><?php echo $i->tujuan_surat; ?></td>
                                             <td><?php echo $i->lokasi_penelitian; ?></td>
-                                            <td><?php echo $i->nim; ?></td>
+                                            <td><?php echo $i->nama_lengkap; ?></td>
                                             <td><?php echo $i->judul; ?></td>
                                             <td><?php echo $i->tanggal_buat; ?></td>
                                             <td>

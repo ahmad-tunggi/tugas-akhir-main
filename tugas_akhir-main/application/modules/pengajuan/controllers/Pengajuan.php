@@ -10,9 +10,19 @@ class Pengajuan extends MX_Controller{
     }
 
     public function index(){
-        $nim = nim($this->session->userdata('security')->id_cession);
-        // var_dump($kd);die;
-        $a['data'] = $this->m_pengajuan->getData($nim);
+        
+        $nim = NULL;$nama = NULL;
+        $lv= $this->session->userdata('security')->lv;
+        if($this->session->userdata('security')->lv == 8){
+            $nim= nim($this->session->userdata('security')->id_cession);
+        }
+        if($this->session->userdata('security')->lv >= 1 && $this->session->userdata('security')->lv <= 7 ){
+            $nim = $this->session->userdata('security')->id_cession;
+        }
+        // $nim = nim($this->session->userdata('security')->id_cession);
+        // var_dump($nama);die;
+        $a['data'] = $this->m_pengajuan->getData($nim,$lv)->result();
+        // var_dump($a['data']);die;
         $a['perihal'] = "Permohonan Penelitian";
         $bulan = date('n');
         $tahun = date('Y');
@@ -28,7 +38,14 @@ class Pengajuan extends MX_Controller{
     
 
     public function simpan_data(){
-        $kd = nim($this->session->userdata('security')->id_cession);
+        $nim = NULL;
+        $lv= $this->session->userdata('security')->lv;
+        if($this->session->userdata('security')->lv == 8){
+            $nim= nim($this->session->userdata('security')->id_cession);
+        }
+        if($this->session->userdata('security')->lv >= 1 && $this->session->userdata('security')->lv <= 7 ){
+            $nim = $this->session->userdata('security')->id_cession;
+        }
         
         $id = $this->input->post('kd_surat');
         $bulan = date('n');
@@ -41,7 +58,7 @@ class Pengajuan extends MX_Controller{
         $data['perihal'] = "Permohonan Penelitian";
         $data['tujuan_surat'] = $this->input->post('tujuan_surat');
         $data['lokasi_penelitian'] = $this->input->post('lokasi_penelitian');
-        $data['nim'] = $kd;
+        $data['nim'] = $nim;
         $data['judul'] = $this->input->post('judul');
         $data['tanggal_buat'] = date('Y-m-d');
         

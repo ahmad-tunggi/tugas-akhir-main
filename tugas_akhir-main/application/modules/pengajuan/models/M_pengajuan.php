@@ -3,9 +3,29 @@
 class M_pengajuan extends CI_Model
 {
     //put your code here
-    public function getData($nim)
+    // public function getData($nim)
+    // {
+    //     return $this->db->query('SELECT a.* , if((isnull(a.kd_surat))," disabled=\"disabled\" "," ") as ada FROM t_surat_ajuan a where a.kd_surat != "0" AND a.nim="'.$nim.'" group by a.kd_surat ORDER BY `a`.`no_surat` desc')->result();
+    // }
+    public function getData($nim=null,$lv=null)
     {
-        return $this->db->query('SELECT a.* , if((isnull(a.kd_surat))," disabled=\"disabled\" "," ") as ada FROM t_surat_ajuan a where a.kd_surat != "0" AND a.nim="'.$nim.'" group by a.kd_surat ORDER BY `a`.`no_surat` desc')->result();
+        $wh = "";
+        if($lv == 8){
+            $wh = " AND a.nim= '".$nim."'  ";
+        }elseif($lv >= 1 && $lv <= 7){
+            $wh = " AND a.nim in (select nim from t_pa_final where md5(nik) = '".$nim."' ) ";
+
+        }
+        return $this->db->query('SELECT a.*,b.nama_lengkap , if((isnull(a.kd_surat))," disabled=\"disabled\" "," ") as ada 
+        FROM t_surat_ajuan a ,
+        t_biodata b
+        ,t_mahasiswa m
+        where a.kd_surat != "0"
+        and m.nim=a.nim 
+        and b.nik=m.nik
+        '.$wh.'
+        group by a.kd_surat 
+        ORDER BY `a`.`no_surat` desc');
     }
 function getSurAkhir($bulan,$tahun){
     $this->db->select_max('no_surat');
